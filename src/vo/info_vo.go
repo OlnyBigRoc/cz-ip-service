@@ -10,9 +10,9 @@ type Reqs struct {
 }
 
 type Result[T any] struct {
-	Code    int    `msgpack:"code"`              // 状态码
-	Data    T      `msgpack:"data"`              // 数据
-	Message string `msgpack:"message,omitempty"` // 消息
+	Code    int    `json:"code" msgpack:"code"`                 // 状态码
+	Data    T      `json:"data" msgpack:"data"`                 // 数据
+	Message string `json:"message" msgpack:"message,omitempty"` // 消息
 }
 type IPInfo struct {
 	IP       string `json:"ip" msgpack:"ip"`                // IP地址
