@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP 属地服务</title>
+    <link href="./static/css/css2" rel="stylesheet">
+    <link href="./static/css/all.min.css" rel="stylesheet">
+    <script src="./static/js/tailwindcss.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB',
+                        secondary: '#4F46E5'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '2px',
+                        DEFAULT: '4px',
+                        'md': '8px',
+                        'lg': '12px',
+                        'xl': '16px',
+                        '2xl': '20px',
+                        '3xl': '24px',
+                        'full': '9999px',
+                        'button': '4px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            min-height: 1024px;
+        }
+        .hero-bg {
+            background-image: url('./static/img/4fdec86274c777d2196cd30e958b85e6.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .copy-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        .copy-success {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .copy-success.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-sm fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-['Pacifico'] text-primary">logo</span>
+                    <span class="ml-4 text-xl font-medium text-gray-900">IP 属地服务</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-200 !rounded-button whitespace-nowrap">文档</button>
+                    <button class="px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-colors duration-200 !rounded-button whitespace-nowrap">立即使用</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-bg pt-32 pb-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="max-w-3xl">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6">高性能 IP 属地查询服务</h1>
+                <p class="text-lg text-gray-600 mb-8">提供快速、准确的 IP 地理位置查询，支持 IPv4/IPv6 双协议栈，JSON/MessagePack 双数据格式，完美适配您的业务需求。</p>
+                <div class="flex space-x-4">
+                    <button class="px-6 py-3 bg-primary text-white font-medium hover:bg-primary/90 transition-colors duration-200 !rounded-button whitespace-nowrap">开始使用</button>
+                    <button class="px-6 py-3 bg-white text-gray-700 font-medium hover:bg-gray-50 transition-colors duration-200 border border-gray-200 !rounded-button whitespace-nowrap">查看文档</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-3 gap-8 mb-20">
+                <div class="bg-white p-8 rounded-lg shadow-sm">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-bolt text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">高性能设计</h3>
+                    <p class="text-gray-600">采用高效的数据结构和算法，确保微秒级的查询响应速度，轻松应对高并发场景。</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-sm">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-database text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">双格式支持</h3>
+                    <p class="text-gray-600">同时支持 JSON 和 MessagePack 数据格式，满足不同场景下的数据传输需求。</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-sm">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-network-wired text-primary text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">IP 双协议栈</h3>
+                    <p class="text-gray-600">完整支持 IPv4 和 IPv6 地址查询，助力您的业务快速适配下一代互联网。</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-8 mb-20">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Web 服务地址</h2>
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">JSON</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="flex-1 bg-gray-50 px-4 py-3 rounded-lg font-mono text-sm text-gray-600">
+                                https://api.example.com/ip/query/json
+                            </div>
+                            <button class="copy-btn ml-2 p-2 rounded hover:bg-gray-100 transition-colors duration-200" onclick="copyToClipboard(this, 'https://api.example.com/ip/query/json')">
+                                <i class="far fa-copy text-gray-400 hover:text-primary"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <span class="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded">MessagePack</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="flex-1 bg-gray-50 px-4 py-3 rounded-lg font-mono text-sm text-gray-600">
+                                https://api.example.com/ip/query/msgpack
+                            </div>
+                            <button class="copy-btn ml-2 p-2 rounded hover:bg-gray-100 transition-colors duration-200" onclick="copyToClipboard(this, 'https://api.example.com/ip/query/msgpack')">
+                                <i class="far fa-copy text-gray-400 hover:text-primary"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-8">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">技术规格</h2>
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">数据格式</h3>
+                        <ul class="space-y-3 text-gray-600">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                JSON 格式支持
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                MessagePack 格式支持
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                UTF-8 编码
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">性能指标</h3>
+                        <ul class="space-y-3 text-gray-600">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                平均响应时间 < 5ms
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                99.9% 可用性保证
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                支持每秒千级查询
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-4 gap-8">
+                <div>
+                    <span class="text-2xl font-['Pacifico'] text-white mb-4 block">logo</span>
+                    <p class="text-gray-400">提供专业的 IP 属地查询服务，为您的业务保驾护航。</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-medium mb-4">产品</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">功能特性</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">技术文档</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">更新日志</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-medium mb-4">支持</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">帮助中心</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">API 文档</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">联系我们</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-medium mb-4">关注我们</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8">
+                <p class="text-gray-400 text-center">© 2024 IP 属地服务. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const icon = button.querySelector('i');
+                icon.classList.remove('far', 'fa-copy');
+                icon.classList.add('fas', 'fa-check');
+                icon.style.color = '#22c55e';
+
+                setTimeout(() => {
+                    icon.classList.remove('fas', 'fa-check');
+                    icon.classList.add('far', 'fa-copy');
+                    icon.style.color = '';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
