@@ -45,8 +45,7 @@ func (c *MsgPackController) Search(ctx *gin.Context) {
 
 	ip := ctx.Query("ip")
 	if ip == "" {
-		ctx.Data(http.StatusBadRequest, binding.MIMEMSGPACK2, res.ErrorMsgpack(fmt.Errorf("ip parameter is required")))
-		return
+		ip = ctx.ClientIP()
 	}
 	if !utils.IsValidIP(ip) {
 		ctx.Data(http.StatusBadRequest, binding.MIMEMSGPACK2, res.ErrorMsgpack(fmt.Errorf("invalid ip format: %s", ip)))

@@ -43,8 +43,7 @@ func (c *SearchController) Search(ctx *gin.Context) {
 
 	ip := ctx.Query("ip")
 	if ip == "" {
-		ctx.JSON(http.StatusBadRequest, res.Error(fmt.Errorf("ip parameter is required")))
-		return
+		ip = ctx.ClientIP()
 	}
 	if !utils.IsValidIP(ip) {
 		ctx.JSON(http.StatusBadRequest, res.Error(fmt.Errorf("invalid ip format: %s", ip)))
