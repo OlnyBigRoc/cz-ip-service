@@ -1,9 +1,15 @@
 package api
 
 import (
+	"cz-ip-service/src/constant"
+	"cz-ip-service/src/metrics"
 	"cz-ip-service/src/service"
+	"cz-ip-service/src/utils"
 	"cz-ip-service/src/vo"
+	"fmt"
 	"net/http"
+	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,33 +33,88 @@ func InitApiJson(group *gin.RouterGroup, searchService *service.SearchService) {
 }
 
 func (c *SearchController) Search(ctx *gin.Context) {
+	startTime := time.Now()
 	res := vo.Result[*vo.IPInfo]{}
+	success := false
+	defer func() {
+		metrics.RecordRequest(success)
+		metrics.RecordResponseTime(time.Since(startTime))
+	}()
 
 	ip := ctx.Query("ip")
-	ipInfo, err := c.SearchService.Search(ctx, ip)
-	if err != nil {
-		ctx.JSON(500, res.Error(err))
+	if ip == "" {
+		ctx.JSON(http.StatusBadRequest, res.Error(fmt.Errorf("ip parameter is required")))
 		return
 	}
-	ctx.JSON(200, res.Success(ipInfo))
-}
-
-func (c *SearchController) BatchSearch(ctx *gin.Context) {
-	res := vo.Result[[]*vo.IPInfo]{}
-	data := make([]*vo.IPInfo, 0)
-	req := vo.Reqs{}
-	if err := ctx.Bind(&req); err != nil {
+	if !utils.IsValidIP(ip) {
+		ctx.JSON(http.StatusBadRequest, res.Error(fmt.Errorf("invalid ip format: %s", ip)))
+		return
+	}
+	ipInfo, err := c.SearchService.Search(ctx, ip)
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, res.Error(err))
 		return
 	}
-	for _, ip := range req.IPs {
-		ipInfo, err := c.SearchService.Search(ctx, ip)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, res.Error(err))
-			return
-		}
-		data = append(data, ipInfo)
+	success = true
+	metrics.RecordIPQuery(ip)
+	ctx.JSON(http.StatusOK, res.Success(ipInfo))
+}
+
+func (c *SearchController) BatchSearch(ctx *gin.Context) {
+	startTime := time.Now()
+	res := vo.Result[[]*vo.IPInfo]{}
+	success := false
+	defer func() {
+		metrics.RecordRequest(success)
+		metrics.RecordResponseTime(time.Since(startTime))
+	}()
+
+	req := vo.Reqs{}
+	if err := ctx.Bind(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, res.Error(err))
+		return
 	}
+
+	valid, errMsg := utils.ValidateIPList(req.IPs, 100)
+	if !valid {
+		ctx.JSON(http.StatusBadRequest, res.Error(fmt.Errorf(errMsg)))
+		return
+	}
+
+	// 使用channel控制并发
+	semaphore := make(chan struct{}, constant.MaxConcurrent)
+	var wg sync.WaitGroup
+	data := make([]*vo.IPInfo, len(req.IPs))
+	errChan := make(chan error, len(req.IPs))
+
+	for i, ip := range req.IPs {
+		wg.Add(1)
+		go func(index int, ipAddr string) {
+			defer wg.Done()
+			semaphore <- struct{}{}        // 获取信号量
+			defer func() { <-semaphore }() // 释放信号量
+
+			ipInfo, err := c.SearchService.Search(ctx, ipAddr)
+			if err != nil {
+				errChan <- err
+				return
+			}
+			data[index] = ipInfo
+			metrics.RecordIPQuery(ipAddr)
+		}(i, ip)
+	}
+
+	// 等待所有goroutine完成
+	wg.Wait()
+	close(errChan)
+
+	// 检查是否有错误发生
+	for err := range errChan {
+		ctx.JSON(http.StatusInternalServerError, res.Error(err))
+		return
+	}
+
+	success = true
 	res = *res.Success(data)
 	ctx.JSON(http.StatusOK, res)
 }

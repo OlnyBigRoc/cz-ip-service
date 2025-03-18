@@ -7,12 +7,13 @@ import (
 	"cz-ip-service/src/utils"
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 var Router *gin.Engine
@@ -46,6 +47,7 @@ func main() {
 	api.InitApiHome(Router.Group("/"))
 	api.InitApiJson(Router.Group("/json"), SearchService)
 	api.InitApiMsgPack(Router.Group("/msgpack"), SearchService)
+	api.InitApiMetrics(Router.Group("/metrics"))
 
 	// 启动服务
 	go func() {
