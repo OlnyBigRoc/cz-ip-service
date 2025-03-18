@@ -3,8 +3,9 @@ package api
 import (
 	"cz-ip-service/src/service"
 	"cz-ip-service/src/vo"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func NewSearchController(searchService *service.SearchService) *SearchController {
@@ -49,9 +50,10 @@ func (c *SearchController) BatchSearch(ctx *gin.Context) {
 		ipInfo, err := c.SearchService.Search(ctx, ip)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, res.Error(err))
+			return
 		}
 		data = append(data, ipInfo)
 	}
-	res.Success(data)
+	res = *res.Success(data)
 	ctx.JSON(http.StatusOK, res)
 }

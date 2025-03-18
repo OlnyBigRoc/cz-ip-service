@@ -3,9 +3,10 @@ package api
 import (
 	"cz-ip-service/src/service"
 	"cz-ip-service/src/vo"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"net/http"
 )
 
 func NewMsgPackController(searchService *service.SearchService) *MsgPackController {
@@ -52,6 +53,7 @@ func (c *MsgPackController) BatchSearch(ctx *gin.Context) {
 		ipInfo, err := c.SearchService.Search(ctx, ip)
 		if err != nil {
 			ctx.Data(http.StatusInternalServerError, binding.MIMEMSGPACK2, res.ErrorMsgpack(err))
+			return
 		}
 		data = append(data, ipInfo)
 	}
