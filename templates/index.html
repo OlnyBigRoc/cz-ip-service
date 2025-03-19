@@ -76,7 +76,7 @@
                 <p class="text-lg text-gray-600 mb-8">提供快速、准确的 IP 地理位置查询，支持 IPv4/IPv6 双协议栈，JSON/MessagePack 双数据格式，完美适配您的业务需求。</p>
                 <div class="flex space-x-4">
                     <button class="px-6 py-3 bg-primary text-white font-medium hover:bg-primary/90 transition-colors duration-200 !rounded-button whitespace-nowrap">开始使用</button>
-                    <button class="px-6 py-3 bg-white text-gray-700 font-medium hover:bg-gray-50 transition-colors duration-200 border border-gray-200 !rounded-button whitespace-nowrap">查看文档</button>
+                    <button class="px-6 py-3 bg-white text-gray-700 font-medium hover:bg-gray-50 transition-colors duration-200 border border-gray-200 !rounded-button whitespace-nowrap" onclick="document.getElementById('api-doc').scrollIntoView({behavior: 'smooth'})">查看文档</button>
                 </div>
             </div>
         </div>
@@ -186,7 +186,7 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow-sm p-8 mb-20">
+            <div class="bg-white rounded-lg shadow-sm p-8 mb-20" id="api-doc">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-6">Web 服务地址</h2>
                 <div class="space-y-6">
                     <div>
@@ -213,6 +213,150 @@
                             <button class="copy-btn ml-2 p-2 rounded hover:bg-gray-100 transition-colors duration-200" id="msgpack-copy-btn">
                                 <i class="far fa-copy text-gray-400 hover:text-primary"></i>
                             </button>
+                        </div>
+                    </div>
+                    
+                    <!-- API 文档字段说明 -->
+                    <div class="mt-8">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">API 文档</h3>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-md font-medium text-gray-800 mb-2">请求参数</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">参数名</th>
+                                            <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">类型</th>
+                                            <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">必填</th>
+                                            <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">描述</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-800">ip</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">string</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">否</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">要查询的IP地址，IPv4或IPv6格式。若不提供则使用请求者IP</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-md font-medium text-gray-800 mb-2">响应字段</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">字段名</th>
+                                            <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">类型</th>
+                                            <th class="py-2 px-4 border-b text-left text-sm font-medium text-gray-700">描述</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-800">code</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">int</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">状态码，200表示成功</td>
+                                        </tr>
+                                        <tr class="bg-blue-50">
+                                            <td class="py-2 px-4 border-b text-sm font-medium text-blue-800">data</td>
+                                            <td class="py-2 px-4 border-b text-sm text-blue-600">object</td>
+                                            <td class="py-2 px-4 border-b text-sm text-blue-600">IP信息数据对象</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-800">
+                                                <div class="flex items-center">
+                                                    <span class="inline-block w-4 h-[1px] bg-gray-300 mr-2"></span>
+                                                    <span class="inline-block border-l border-gray-300 h-4 mr-2"></span>
+                                                    <span>data.ip</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">string</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">查询的IP地址</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-800">
+                                                <div class="flex items-center">
+                                                    <span class="inline-block w-4 h-[1px] bg-gray-300 mr-2"></span>
+                                                    <span class="inline-block border-l border-gray-300 h-4 mr-2"></span>
+                                                    <span>data.country</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">string</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">IP归属国家</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-800">
+                                                <div class="flex items-center">
+                                                    <span class="inline-block w-4 h-[1px] bg-gray-300 mr-2"></span>
+                                                    <span class="inline-block border-l border-gray-300 h-4 mr-2"></span>
+                                                    <span>data.province</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">string</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">IP归属省份</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-800">
+                                                <div class="flex items-center">
+                                                    <span class="inline-block w-4 h-[1px] bg-gray-300 mr-2"></span>
+                                                    <span class="inline-block border-l border-gray-300 h-4 mr-2"></span>
+                                                    <span>data.city</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">string</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">IP归属城市</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-800">
+                                                <div class="flex items-center">
+                                                    <span class="inline-block w-4 h-[1px] bg-gray-300 mr-2"></span>
+                                                    <span class="inline-block border-l border-gray-300 h-4 mr-2"></span>
+                                                    <span>data.isp</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">string</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">IP归属运营商</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-800">
+                                                <div class="flex items-center">
+                                                    <span class="inline-block w-4 h-[1px] bg-gray-300 mr-2"></span>
+                                                    <span class="inline-block border-l border-gray-300 h-4 mr-2"></span>
+                                                    <span>data.time</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">int64</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">查询耗时(微秒)</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-800">message</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">string</td>
+                                            <td class="py-2 px-4 border-b text-sm text-gray-600">错误信息，仅在code不为200时出现</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-md font-medium text-gray-800 mb-2">示例响应</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <pre class="text-sm whitespace-pre overflow-x-auto"><span class="text-gray-600">{</span>
+    <span class="text-purple-700">"code"</span><span class="text-gray-600">:</span> <span class="text-blue-600">200</span>,
+    <span class="text-purple-700">"data"</span><span class="text-gray-600">:</span> <span class="text-gray-600">{</span>
+        <span class="text-purple-700">"ip"</span><span class="text-gray-600">:</span> <span class="text-green-600">"8.8.8.8"</span>,
+        <span class="text-purple-700">"country"</span><span class="text-gray-600">:</span> <span class="text-green-600">"美国"</span>,
+        <span class="text-purple-700">"province"</span><span class="text-gray-600">:</span> <span class="text-green-600">""</span>,
+        <span class="text-purple-700">"city"</span><span class="text-gray-600">:</span> <span class="text-green-600">""</span>,
+        <span class="text-purple-700">"isp"</span><span class="text-gray-600">:</span> <span class="text-green-600">"Google公司"</span>,
+        <span class="text-purple-700">"time"</span><span class="text-gray-600">:</span> <span class="text-blue-600">156</span>
+    <span class="text-gray-600">}</span>
+<span class="text-gray-600">}</span></pre>
+                            </div>
                         </div>
                     </div>
                 </div>
