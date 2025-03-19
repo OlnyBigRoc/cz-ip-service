@@ -401,6 +401,56 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- 源码地址 -->
+            <div class="bg-white rounded-lg shadow-sm p-8 mt-20">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">开源代码</h2>
+                <p class="text-gray-600 mb-6">本项目完全开源，欢迎查看源码、提交问题或贡献代码。您可以通过以下平台访问我们的代码库：</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="border border-gray-200 rounded-lg p-6 transition-all duration-300 hover:shadow-md">
+                        <div class="flex items-center mb-4">
+                            <i class="fab fa-github text-2xl text-gray-800 mr-3"></i>
+                            <h3 class="text-lg font-medium text-gray-900">GitHub</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">GitHub 是全球最大的代码托管平台，提供完整的 Git 工作流程</p>
+                        <div class="flex items-center">
+                            <a href="#" id="github-link" class="flex-1 bg-gray-50 px-4 py-3 rounded-lg font-mono text-sm text-gray-600 truncate">
+                                <!-- 地址将手动填写 -->
+                            </a>
+                            <button class="copy-btn ml-2 p-2 rounded hover:bg-gray-100 transition-colors duration-200" id="github-copy-btn">
+                                <i class="far fa-copy text-gray-400 hover:text-primary"></i>
+                            </button>
+                        </div>
+                        <div class="mt-4">
+                            <a href="#" id="github-visit-btn" class="inline-flex items-center justify-center px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-lg transition-colors duration-200 w-full">
+                                <i class="fas fa-external-link-alt mr-2"></i> 前往 GitHub
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-gray-200 rounded-lg p-6 transition-all duration-300 hover:shadow-md">
+                        <div class="flex items-center mb-4">
+                            <i class="fab fa-git-alt text-2xl text-red-600 mr-3"></i>
+                            <h3 class="text-lg font-medium text-gray-900">Gitee</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Gitee 是中国领先的代码托管平台，访问速度更快</p>
+                        <div class="flex items-center">
+                            <a href="#" id="gitee-link" class="flex-1 bg-gray-50 px-4 py-3 rounded-lg font-mono text-sm text-gray-600 truncate">
+                                <!-- 地址将手动填写 -->
+                            </a>
+                            <button class="copy-btn ml-2 p-2 rounded hover:bg-gray-100 transition-colors duration-200" id="gitee-copy-btn">
+                                <i class="far fa-copy text-gray-400 hover:text-primary"></i>
+                            </button>
+                        </div>
+                        <div class="mt-4">
+                            <a href="#" id="gitee-visit-btn" class="inline-flex items-center justify-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200 w-full">
+                                <i class="fas fa-external-link-alt mr-2"></i> 前往 Gitee
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -489,6 +539,64 @@
             if (msgpackCopyBtn) {
                 msgpackCopyBtn.addEventListener('click', function() {
                     copyToClipboard(this, msgpackUrl);
+                });
+            }
+            
+            // 源码地址链接和复制功能
+            const githubLink = document.getElementById('github-link');
+            const giteeLink = document.getElementById('gitee-link');
+            const githubVisitBtn = document.getElementById('github-visit-btn');
+            const giteeVisitBtn = document.getElementById('gitee-visit-btn');
+            const githubCopyBtn = document.getElementById('github-copy-btn');
+            const giteeCopyBtn = document.getElementById('gitee-copy-btn');
+            
+            // 稍后手动填写的地址
+            const githubRepoUrl = "https://github.com/OlnyBigRoc/cz-ip-service"; 
+            const giteeRepoUrl = "https://gitee.com/big_roc_admin/cz-ip-service";  
+            
+            // 设置源码链接显示和访问
+            if (githubLink && githubVisitBtn) {
+                if (githubRepoUrl) {
+                    githubLink.textContent = githubRepoUrl;
+                    githubLink.href = githubRepoUrl;
+                    githubLink.target = "_blank"; // 在新标签页打开
+                    githubLink.rel = "noopener noreferrer"; // 安全措施
+                    githubVisitBtn.href = githubRepoUrl;
+                    githubVisitBtn.target = "_blank"; // 在新标签页打开
+                    githubVisitBtn.rel = "noopener noreferrer"; // 安全措施
+                } else {
+                    githubLink.textContent = "即将上线...";
+                    githubVisitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    githubVisitBtn.removeAttribute('href');
+                }
+            }
+            
+            if (giteeLink && giteeVisitBtn) {
+                if (giteeRepoUrl) {
+                    giteeLink.textContent = giteeRepoUrl;
+                    giteeLink.href = giteeRepoUrl;
+                    giteeLink.target = "_blank"; // 在新标签页打开
+                    giteeLink.rel = "noopener noreferrer"; // 安全措施
+                    giteeVisitBtn.href = giteeRepoUrl;
+                    giteeVisitBtn.target = "_blank"; // 在新标签页打开
+                    giteeVisitBtn.rel = "noopener noreferrer"; // 安全措施
+                } else {
+                    giteeLink.textContent = "即将上线...";
+                    giteeVisitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    giteeVisitBtn.removeAttribute('href');
+                }
+            }
+            
+            // 复制按钮功能
+            if (githubCopyBtn && githubRepoUrl) {
+                githubCopyBtn.addEventListener('click', function() {
+                    copyToClipboard(this, githubRepoUrl);
+                });
+            }
+            
+            if (giteeCopyBtn && giteeRepoUrl) {
+                giteeCopyBtn.addEventListener('click', function() {
+                    copyToClipboard(this, giteeRepoUrl);
                 });
             }
 
