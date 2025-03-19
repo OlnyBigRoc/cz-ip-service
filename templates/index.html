@@ -194,10 +194,10 @@
                             <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">JSON</span>
                         </div>
                         <div class="flex items-center">
-                            <div class="flex-1 bg-gray-50 px-4 py-3 rounded-lg font-mono text-sm text-gray-600">
+                            <div class="flex-1 bg-gray-50 px-4 py-3 rounded-lg font-mono text-sm text-gray-600" id="json-url">
                                 https://api.example.com/ip/query/json
                             </div>
-                            <button class="copy-btn ml-2 p-2 rounded hover:bg-gray-100 transition-colors duration-200" onclick="copyToClipboard(this, 'https://api.example.com/ip/query/json')">
+                            <button class="copy-btn ml-2 p-2 rounded hover:bg-gray-100 transition-colors duration-200" id="json-copy-btn">
                                 <i class="far fa-copy text-gray-400 hover:text-primary"></i>
                             </button>
                         </div>
@@ -207,10 +207,10 @@
                             <span class="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded">MessagePack</span>
                         </div>
                         <div class="flex items-center">
-                            <div class="flex-1 bg-gray-50 px-4 py-3 rounded-lg font-mono text-sm text-gray-600">
+                            <div class="flex-1 bg-gray-50 px-4 py-3 rounded-lg font-mono text-sm text-gray-600" id="msgpack-url">
                                 https://api.example.com/ip/query/msgpack
                             </div>
-                            <button class="copy-btn ml-2 p-2 rounded hover:bg-gray-100 transition-colors duration-200" onclick="copyToClipboard(this, 'https://api.example.com/ip/query/msgpack')">
+                            <button class="copy-btn ml-2 p-2 rounded hover:bg-gray-100 transition-colors duration-200" id="msgpack-copy-btn">
                                 <i class="far fa-copy text-gray-400 hover:text-primary"></i>
                             </button>
                         </div>
@@ -322,6 +322,31 @@
             const searchIpBtn = document.getElementById('searchIpBtn');
             const ipInput = document.getElementById('ipInput');
             const searchResult = document.getElementById('searchResult');
+            
+            // 设置动态API URL
+            const baseUrl = window.location.origin; // 获取当前域名和端口
+            const jsonUrl = `${baseUrl}/json`;
+            const msgpackUrl = `${baseUrl}/msgpack`;
+            
+            // 更新显示的URL
+            const jsonUrlElement = document.getElementById('json-url');
+            const msgpackUrlElement = document.getElementById('msgpack-url');
+            if (jsonUrlElement) jsonUrlElement.textContent = jsonUrl;
+            if (msgpackUrlElement) msgpackUrlElement.textContent = msgpackUrl;
+            
+            // 更新复制按钮
+            const jsonCopyBtn = document.getElementById('json-copy-btn');
+            const msgpackCopyBtn = document.getElementById('msgpack-copy-btn');
+            if (jsonCopyBtn) {
+                jsonCopyBtn.addEventListener('click', function() {
+                    copyToClipboard(this, jsonUrl);
+                });
+            }
+            if (msgpackCopyBtn) {
+                msgpackCopyBtn.addEventListener('click', function() {
+                    copyToClipboard(this, msgpackUrl);
+                });
+            }
 
             if (searchIpBtn && ipInput) {
                 searchIpBtn.addEventListener('click', function() {
@@ -335,8 +360,8 @@
                     searchIpBtn.disabled = true;
                     searchIpBtn.innerHTML = '查询中...';
                     
-                    // 发送请求到msgpack接口
-                    fetch(`/msgpack?ip=${encodeURIComponent(ip)}`, {
+                    // 发送请求到msgpack接口，使用动态URL
+                    fetch(`${msgpackUrl}?ip=${encodeURIComponent(ip)}`, {
                         headers: {
                             'Accept': 'application/x-msgpack'
                         }
@@ -372,8 +397,8 @@
                     })
                     .catch(error => {
                         console.error('使用msgpack接口出错:', error);
-                        // 如果msgpack失败，回退到json接口
-                        fetch(`/json?ip=${encodeURIComponent(ip)}`)
+                        // 如果msgpack失败，回退到json接口，使用动态URL
+                        fetch(`${jsonUrl}?ip=${encodeURIComponent(ip)}`)
                             .then(response => response.json())
                             .then(data => {
                                 searchIpBtn.disabled = false;
