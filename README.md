@@ -101,3 +101,12 @@
 2. 新建 Feat_xxx 分支
 3. 提交代码
 4. 新建 Pull Request
+
+## 感谢
+- [纯真IP数据库](https://www.cz88.net)
+- [Gin](https://github.com/gin-gonic/gin)
+- [MessagePack](https://github.com/vmihailenco/msgpack)
+- [Zap](https://github.com/uber-go/zap)
+- [ENV](https://github.com/caarlos0/env)
+- [Go](https://golang.org)
+- [czdb-search-golang](https://github.com/SpectatorNan/czdb-search-golang)
