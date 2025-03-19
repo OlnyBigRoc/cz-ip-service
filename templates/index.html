@@ -7,6 +7,7 @@
     <link href="./static/css/css2" rel="stylesheet">
     <link href="./static/css/all.min.css" rel="stylesheet">
     <script src="./static/js/tailwindcss.js"></script>
+    <script src="./static/js/msgpack/msgpack.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -83,6 +84,84 @@
 
     <div class="py-20">
         <div class="max-w-7xl mx-auto px-4">
+            <!-- IP 查询模块 -->
+            <div class="bg-white rounded-lg shadow-sm p-8 mb-20">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">IP 归属查询</h2>
+                <div class="space-y-6">
+                    <!-- 当前IP信息展示 -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="mb-2 font-medium text-gray-700">您当前的IP信息：</div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center">
+                                <span class="text-gray-500 mr-2">IP地址:</span>
+                                <span class="font-medium text-gray-900">{{ .IPInfo.IP }}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gray-500 mr-2">归属国家:</span>
+                                <span class="font-medium text-gray-900">{{ .IPInfo.Country }}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gray-500 mr-2">归属省份:</span>
+                                <span class="font-medium text-gray-900">{{ .IPInfo.Province }}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gray-500 mr-2">归属城市:</span>
+                                <span class="font-medium text-gray-900">{{ .IPInfo.City }}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gray-500 mr-2">运营商:</span>
+                                <span class="font-medium text-gray-900">{{ .IPInfo.Isp }}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gray-500 mr-2">查询耗时:</span>
+                                <span class="font-medium text-gray-900">{{ .IPInfo.Time }} 微秒</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 查询其他IP -->
+                    <div>
+                        <div class="mb-2 font-medium text-gray-700">查询其他IP地址:</div>
+                        <div class="flex items-center">
+                            <input id="ipInput" type="text" placeholder="请输入IP地址" class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <button id="searchIpBtn" class="bg-primary text-white px-4 py-2 rounded-r-lg hover:bg-primary/90 transition-colors duration-200">
+                                查询
+                            </button>
+                        </div>
+                        
+                        <!-- 查询结果 -->
+                        <div id="searchResult" class="mt-4 bg-gray-50 p-4 rounded-lg hidden">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <span class="text-gray-500 mr-2">IP地址:</span>
+                                    <span id="result-ip" class="font-medium text-gray-900"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-gray-500 mr-2">归属国家:</span>
+                                    <span id="result-country" class="font-medium text-gray-900"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-gray-500 mr-2">归属省份:</span>
+                                    <span id="result-province" class="font-medium text-gray-900"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-gray-500 mr-2">归属城市:</span>
+                                    <span id="result-city" class="font-medium text-gray-900"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-gray-500 mr-2">运营商:</span>
+                                    <span id="result-isp" class="font-medium text-gray-900"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-gray-500 mr-2">查询耗时:</span>
+                                    <span id="result-time" class="font-medium text-gray-900"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="grid grid-cols-3 gap-8 mb-20">
                 <div class="bg-white p-8 rounded-lg shadow-sm">
                     <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
@@ -237,6 +316,100 @@
                 }, 2000);
             });
         }
+
+        // IP查询功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchIpBtn = document.getElementById('searchIpBtn');
+            const ipInput = document.getElementById('ipInput');
+            const searchResult = document.getElementById('searchResult');
+
+            if (searchIpBtn && ipInput) {
+                searchIpBtn.addEventListener('click', function() {
+                    const ip = ipInput.value.trim();
+                    if (!ip) {
+                        alert('请输入IP地址');
+                        return;
+                    }
+                    
+                    // 显示加载状态
+                    searchIpBtn.disabled = true;
+                    searchIpBtn.innerHTML = '查询中...';
+                    
+                    // 发送请求到msgpack接口
+                    fetch(`/msgpack?ip=${encodeURIComponent(ip)}`, {
+                        headers: {
+                            'Accept': 'application/x-msgpack'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('响应不成功: ' + response.status);
+                        }
+                        // 获取MessagePack数据
+                        return response.arrayBuffer();
+                    })
+                    .then(buffer => {
+                        // 使用msgpack-lite库解析MessagePack数据
+                        const data = msgpack.decode(new Uint8Array(buffer));
+                        
+                        searchIpBtn.disabled = false;
+                        searchIpBtn.innerHTML = '查询';
+                        
+                        if (data.code === 200) {
+                            // 显示结果
+                            document.getElementById('result-ip').textContent = data.data.ip || '';
+                            document.getElementById('result-country').textContent = data.data.country || '';
+                            document.getElementById('result-province').textContent = data.data.province || '';
+                            document.getElementById('result-city').textContent = data.data.city || '';
+                            document.getElementById('result-isp').textContent = data.data.isp || '';
+                            document.getElementById('result-time').textContent = (data.data.time || '0') + ' 微秒';
+                            
+                            // 显示结果区域
+                            searchResult.classList.remove('hidden');
+                        } else {
+                            alert('查询失败: ' + (data.message || '未知错误'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('使用msgpack接口出错:', error);
+                        // 如果msgpack失败，回退到json接口
+                        fetch(`/json?ip=${encodeURIComponent(ip)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                searchIpBtn.disabled = false;
+                                searchIpBtn.innerHTML = '查询';
+                                
+                                if (data.code === 200) {
+                                    // 显示结果
+                                    document.getElementById('result-ip').textContent = data.data.ip || '';
+                                    document.getElementById('result-country').textContent = data.data.country || '';
+                                    document.getElementById('result-province').textContent = data.data.province || '';
+                                    document.getElementById('result-city').textContent = data.data.city || '';
+                                    document.getElementById('result-isp').textContent = data.data.isp || '';
+                                    document.getElementById('result-time').textContent = (data.data.time || '0') + ' 微秒';
+                                    
+                                    // 显示结果区域
+                                    searchResult.classList.remove('hidden');
+                                } else {
+                                    alert('查询失败: ' + (data.message || '未知错误'));
+                                }
+                            })
+                            .catch(err => {
+                                searchIpBtn.disabled = false;
+                                searchIpBtn.innerHTML = '查询';
+                                alert('查询出错: ' + err.message);
+                            });
+                    });
+                });
+                
+                // 支持回车键查询
+                ipInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchIpBtn.click();
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

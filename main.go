@@ -44,7 +44,7 @@ func main() {
 	Router.LoadHTMLGlob("templates/*")
 	Router.Static("/static", "./static")
 	// 注册api
-	api.InitApiHome(Router.Group("/"))
+	api.InitApiHome(Router.Group("/"), SearchService)
 	api.InitApiJson(Router.Group("/json"), SearchService)
 	api.InitApiMsgPack(Router.Group("/msgpack"), SearchService)
 	api.InitApiMetrics(Router.Group("/metrics"))
